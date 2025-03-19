@@ -1,4 +1,5 @@
 import pygame
+import random
 
 pygame.init()
 screen = pygame.display.set_mode((1200,850))
@@ -18,12 +19,19 @@ playerY_change = 0
 def player(x, y):
     screen.blit(playerImg, (x, y)) #chèn player vào
 
+#Enermy
+EnermyImg = pygame.image.load('D:/Python/Game/ghost.png')
+EnermyImg = pygame.transform.scale(EnermyImg, (65, 65))  
+EnermyX = random.randint(0, 1200)
+EnermyY = random.randint(50, 450)
+def Enermy(x, y):
+    screen.blit(EnermyImg, (x, y)) #chèn enermy vào
 
 #Game loop
 running = True
 while running:
     #màu 
-    screen.fill((20, 0, 10))
+    screen.fill((0, 0, 0))
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -64,5 +72,16 @@ while running:
     elif playerY >= 736:
         playerY = 736
 
+    if EnermyX <= 0:
+        EnermyX = 0
+    elif EnermyX >= 1100:
+        EnermyX = 1100
+
+    if EnermyY <= 0:
+        EnermyY = 0
+    elif EnermyY >= 736:
+        EnermyY = 736
+
     player(playerX, playerY)
+    Enermy(EnermyX, EnermyY)
     pygame.display.update()
