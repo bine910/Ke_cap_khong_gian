@@ -20,12 +20,36 @@ def player(x, y):
     screen.blit(playerImg, (x, y)) #chèn player vào
 
 #Enermy
-EnermyImg = pygame.image.load('D:/Python/Game/ghost.png')
-EnermyImg = pygame.transform.scale(EnermyImg, (65, 65))  
-EnermyX = random.randint(0, 1200)
-EnermyY = random.randint(50, 450)
-def Enermy(x, y):
-    screen.blit(EnermyImg, (x, y)) #chèn enermy vào
+enermyImg = pygame.image.load('D:/Python/Game/ghost.png')
+enermyImg = pygame.transform.scale(enermyImg, (65, 65))  
+enermyX = random.randint(0, 1200)
+enermyY = random.randint(50, 450)
+enermyX_change = 0.1
+enermyY_change = 0.1
+
+def enermy(x, y):
+    screen.blit(enermyImg, (x, y)) #chèn enermy vào
+
+#Bullet
+bulletImg = pygame.image.load('D:/Python/Game/bullet.png')
+bulletX = 0
+bulletY = 480
+bulletX_change = 0
+bulletY_change = 10
+bullet_state = "ready"
+
+def fire_bullet(x, y):
+    global bullet_state
+    bullet_state = "fire"
+    screen.blit(bulletImg, (x + 16, y + 10))
+
+# Bullet Movement
+if bullet_state == "fire":
+    fire_bullet(bulletX, bulletY)
+    bulletY -= bulletY_change
+if bulletY <= 0:
+    bulletY = 480
+    bullet_state = "ready"
 
 #Game loop
 running = True
@@ -59,9 +83,17 @@ while running:
             if event.key == pygame.K_UP or event.key == pygame.K_DOWN:
                 playerY_change = 0
     
+        #Bắn bằng phím space
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                if bullet_state == "ready":
+                    bulletX = playerX
+                    fire_bullet(bulletX, bulletY)
+    
     playerX += playerX_change
     playerY += playerY_change
-    #boundary limit
+
+    #Boundary limit
     if playerX <= 0:
         playerX = 0
     elif playerX >= 1100:
@@ -72,16 +104,15 @@ while running:
     elif playerY >= 736:
         playerY = 736
 
-    if EnermyX <= 0:
-        EnermyX = 0
-    elif EnermyX >= 1100:
-        EnermyX = 1100
+    enermyX += enermyX_change
+    enermyY += enermyY_change
+    if enermyX <= 0 or enermyX >= 1100:
+        enermyX_change *= -1
+    if enermyY <= 0 or enermyY >= 450:
+        enermyY_change *= -1
 
-    if EnermyY <= 0:
-        EnermyY = 0
-    elif EnermyY >= 736:
-        EnermyY = 736
+
 
     player(playerX, playerY)
-    Enermy(EnermyX, EnermyY)
+    enermy(enermyX, enermyY)    
     pygame.display.update()
