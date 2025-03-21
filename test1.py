@@ -33,7 +33,7 @@ def enermy(x, y):
 #Bullet
 bulletImg = pygame.image.load('D:/Python/Game/bullet.png')
 bulletX = 0
-bulletY = 480
+bulletY = 800
 bulletX_change = 0
 bulletY_change = 10
 bullet_state = "ready"
@@ -41,15 +41,7 @@ bullet_state = "ready"
 def fire_bullet(x, y):
     global bullet_state
     bullet_state = "fire"
-    screen.blit(bulletImg, (x + 16, y + 10))
-
-# Bullet Movement
-if bullet_state == "fire":
-    fire_bullet(bulletX, bulletY)
-    bulletY -= bulletY_change
-if bulletY <= 0:
-    bulletY = 480
-    bullet_state = "ready"
+    screen.blit(bulletImg, (x + 50 - 16, y - 10))
 
 #Game loop
 running = True
@@ -88,6 +80,7 @@ while running:
             if event.key == pygame.K_SPACE:
                 if bullet_state == "ready":
                     bulletX = playerX
+                    bulletY = playerY
                     fire_bullet(bulletX, bulletY)
     
     playerX += playerX_change
@@ -111,7 +104,13 @@ while running:
     if enermyY <= 0 or enermyY >= 450:
         enermyY_change *= -1
 
-
+    # Bullet Movement
+    if bullet_state == "fire":
+        fire_bullet(bulletX, bulletY)
+        bulletY -= bulletY_change
+    if bulletY <= 0:
+        bulletY = 800
+        bullet_state = "ready"
 
     player(playerX, playerY)
     enermy(enermyX, enermyY)    
