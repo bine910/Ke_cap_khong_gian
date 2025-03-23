@@ -13,7 +13,7 @@ pygame.display.set_icon(icon)
 playerImg = pygame.image.load('D:/Python/Game/arcade_space.png')
 playerImg = pygame.transform.scale(playerImg, (100, 100))  
 playerX = (1200 - 100) // 2  
-playerY = 850 - 200          
+playerY = 693  # Vị trí giữa khoảng (650 + 736) / 2
 playerX_change = 0
 playerY_change = 0
 def player(x, y):
@@ -48,6 +48,10 @@ running = True
 while running:
     #màu 
     screen.fill((0, 0, 0))
+    
+    # Vẽ đường kẻ trắng để phân định giới hạn
+    boundary_y = 650  # Đặt giới hạn gần với vị trí ban đầu của player hơn
+    pygame.draw.line(screen, (255, 255, 255), (0, boundary_y), (1200, boundary_y), 2)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -92,8 +96,9 @@ while running:
     elif playerX >= 1100:
         playerX = 1100
 
-    if playerY <= 0:
-        playerY = 0
+    # Giới hạn player chỉ di chuyển bên dưới đường kẻ trắng
+    if playerY <= boundary_y:  # Sử dụng biến boundary_y thay vì số cứng
+        playerY = boundary_y
     elif playerY >= 736:
         playerY = 736
 
