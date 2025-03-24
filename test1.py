@@ -8,6 +8,9 @@ screen = pygame.display.set_mode((1200,850))
 pygame.display.set_caption("Kẻ_cướp_không_gian")
 icon = pygame.image.load('D:/Python/Game/Logo.png')
 pygame.display.set_icon(icon)
+# Background
+backgroundImg = pygame.image.load('D:/Python/Game/background.png')
+backgroundImg = pygame.transform.scale(backgroundImg, (1200, 850))
 
 #Player
 playerImg = pygame.image.load('D:/Python/Game/arcade_space.png')
@@ -46,9 +49,11 @@ def fire_bullet(x, y):
 #Game loop
 running = True
 while running:
-    #màu 
+    #màu nền
     screen.fill((0, 0, 0))
-    
+    screen.blit(backgroundImg, (0, 0))
+
+
     # Vẽ đường kẻ trắng để phân định giới hạn
     boundary_y = 650  # Đặt giới hạn gần với vị trí ban đầu của player hơn
     pygame.draw.line(screen, (255, 255, 255), (0, boundary_y), (1200, boundary_y), 2)
