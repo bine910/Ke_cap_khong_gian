@@ -22,16 +22,29 @@ playerY_change = 0
 def player(x, y):
     screen.blit(playerImg, (x, y)) #chèn player vào
 
-#Enermy
-enermyImg = pygame.image.load('D:/Python/Game/ghost.png')
-enermyImg = pygame.transform.scale(enermyImg, (65, 65))  
-enermyX = random.randint(0, 1200)
-enermyY = random.randint(50, 450)
-enermyX_change = 0.1
-enermyY_change = 0.1
+#Enemy
+class Enemy:
+    def __init__(self):
+        self.img = pygame.image.load('D:/Python/Game/ghost.png')
+        self.img = pygame.transform.scale(self.img, (65, 65))
+        self.reset_position()
+        self.speed = 0.08
 
-def enermy(x, y):
-    screen.blit(enermyImg, (x, y)) #chèn enermy vào
+    def reset_position(self):
+        self.x = random.randint(0, 1135)  # 1200 - 65 (kích thước enemy)
+        self.y = random.randint(-100, -50)  # Spawn phía trên màn hình
+
+    def move(self):
+        self.y += self.speed
+        # Nếu enemy ra khỏi màn hình, reset lại vị trí
+        if self.y > 850:
+            self.reset_position()
+
+    def draw(self, screen):
+        screen.blit(self.img, (self.x, self.y))
+
+# Tạo list chứa nhiều enemy
+enemies = [Enemy() for _ in range(2)]  # Tạo 5 enemy
 
 #Bullet
 bulletImg = pygame.image.load('D:/Python/Game/bullet.png')
@@ -50,7 +63,7 @@ def fire_bullet(x, y):
 running = True
 while running:
     #màu nền
-    screen.fill((0, 0, 0))
+    # screen.fill((0, 0, 0))
     screen.blit(backgroundImg, (0, 0))
 
 
@@ -66,20 +79,20 @@ while running:
         #Sang trái phải
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                playerX_change -= 0.1
+                playerX_change -= 0.2 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RIGHT:
-                playerX_change = 0.1
+                playerX_change = 0.2
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
                 playerX_change = 0
         #Lên xuống
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP:
-                playerY_change -= 0.1
+                playerY_change -= 0.2
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_DOWN:
-                playerY_change = 0.1
+                playerY_change = 0.2
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_UP or event.key == pygame.K_DOWN:
                 playerY_change = 0
@@ -107,12 +120,10 @@ while running:
     elif playerY >= 736:
         playerY = 736
 
-    enermyX += enermyX_change
-    enermyY += enermyY_change
-    if enermyX <= 0 or enermyX >= 1100:
-        enermyX_change *= -1
-    if enermyY <= 0 or enermyY >= 450:
-        enermyY_change *= -1
+    # Cập nhật và vẽ enemies
+    for enemy in enemies:
+        enemy.move()
+        enemy.draw(screen)
 
     # Bullet Movement
     if bullet_state == "fire":
@@ -123,5 +134,4 @@ while running:
         bullet_state = "ready"
 
     player(playerX, playerY)
-    enermy(enermyX, enermyY)    
     pygame.display.update()
