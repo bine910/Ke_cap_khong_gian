@@ -111,7 +111,7 @@ while running:
     pygame.draw.line(screen, (255, 255, 255), (0, 650), (1200, 650), 2)
     level_timer += 1
 
-    # Xử lý sự kiện
+    # Phím di chuyển
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -205,3 +205,4 @@ while running:
     clock.tick(240)
 
 pygame.quit()
+
